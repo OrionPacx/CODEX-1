@@ -1,0 +1,4 @@
+const fs=require('fs'),vm=require('vm'); const sandbox={window:{}};vm.runInNewContext(fs.readFileSync('engine.js','utf8'),sandbox); const E=sandbox.window.CampEngine;
+const day={schedule:[{id:'a',title:'Activity',originalStart:540,originalEnd:600,originalDuration:60,flexibility:'movable',minDuration:20},{id:'b',title:'Lunch',originalStart:600,originalEnd:660,originalDuration:60,flexibility:'movable',minDuration:20}],backups:'backup'};let state={edits:{},weather:'normal',dayEnd:1320};
+const a=day.schedule[0];state=E.apply(state,{kind:'extend',id:'a',block:a,minutes:20,label:'extended'});const plan=E.calc(day,state);if(plan.blocks[0].currentEnd!==620||plan.blocks[1].currentStart!==620)throw Error('Cascade failed');if(E.time(780)!=='1:00 PM')throw Error('Time formatting failed');if(!E.health(day,plan,state).length)throw Error('Health missing');console.log('engine.test.js passed');
+
